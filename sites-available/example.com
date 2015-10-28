@@ -19,6 +19,20 @@ server {
 }
 
 server {
+
+  ###################################################
+  # Settings to turn on pagespeed and fastcgi cache #
+  ###################################################
+
+  # Pagespeed (on/off)
+  set $pagespeed_status off
+
+  # Skip fastcgi caching (1/0)
+  # 0 = cache is active, 1= cache is set off
+  set $skip_cache 0;
+
+  ###################################################
+
   # listen [::]:80 accept_filter=httpready; # for FreeBSD
   # listen 80 accept_filter=httpready; # for FreeBSD
   # listen [::]:80 deferred; # for Linux
@@ -54,10 +68,6 @@ server {
   # Include the basic h5bp config set
   include h5bp/basic.conf;
 
-  # Turn caching on/off. Caching should be turned on only at production sites.
-  # 0 = on, 1 = off
-  set $skip_cache 0;
-
   # Include page caching exclude configuration.
   include global/cache-exclude.conf;
 
@@ -72,8 +82,8 @@ server {
   # auth_basic_user_file /srv/www/EXAMPLE.COM/htpasswd;
   #}
 
-  # PageSpeed configuration.
-  pagespeed on;
+  # Pagespeed
+  pagespeed $pagespeed_status;
 
   # Enable configuration level
   pagespeed RewriteLevel CoreFilters;
