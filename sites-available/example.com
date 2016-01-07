@@ -5,8 +5,6 @@
 
 # Page caching
 fastcgi_cache_path /srv/www/EXAMPLE.COM/cache levels=1:2 keys_zone=EXAMPLE_CACHE:100m inactive=60m;
-fastcgi_cache_key "$scheme$request_method$host$request_uri";
-fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
 
 server {
   # don't forget to tell on which port this server listens
@@ -21,6 +19,9 @@ server {
 }
 
 server {
+  # Site level settings for fastcgi cache
+  fastcgi_cache_key "$scheme$request_method$host$request_uri";
+  fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
 
   ###################################################
   # Settings to turn on pagespeed and fastcgi cache #
