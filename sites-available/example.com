@@ -20,7 +20,6 @@ server {
 
 server {
   # Site level settings for fastcgi cache
-  fastcgi_cache_key "$scheme$request_method$host$request_uri";
   fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
 
   ###################################################
