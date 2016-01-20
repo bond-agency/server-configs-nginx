@@ -51,9 +51,9 @@ server {
   # Index files
   index index.html index.php;
 
-  # Custom log locations
-  error_log  /srv/www/EXAMPLE.COM/logs/error.log warn;
-  access_log /srv/www/EXAMPLE.COM/logs/access.log main;
+  # Custom log locations. Enable if needed.
+  #error_log  /srv/www/EXAMPLE.COM/logs/error.log warn;
+  #access_log /srv/www/EXAMPLE.COM/logs/access.log main;
 
   #Specify a charset
   charset utf-8;
