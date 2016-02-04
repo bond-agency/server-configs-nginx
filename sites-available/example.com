@@ -127,6 +127,8 @@ server {
   	fastcgi_cache_bypass $skip_cache;
   	fastcgi_no_cache $skip_cache;
   	fastcgi_cache EXAMPLE_CACHE;
-  	fastcgi_cache_valid 60m;
+  	fastcgi_cache_valid 200 302 10m;
+    fastcgi_cache_valid 301 1h;
+    fastcgi_cache_valid any 1m;
   }
 }
