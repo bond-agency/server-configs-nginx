@@ -1,3 +1,12 @@
+# Ignore everything except example files under sites-available
+sites-available/
+sites-available/*
+!sites-available/README.md
+!sites-available/example.com
+!sites-available/no-default
+!sites-available/ssl.example.com
+
+# Ignore everything under sites-enabled but keep the folder
 sites-enabled/
 sites-enabled/*
 !sites-enabled/.gitkeep
