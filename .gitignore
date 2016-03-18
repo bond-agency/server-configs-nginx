@@ -7,8 +7,8 @@ sites-available/**
 !sites-available/ssl.example.com
 
 # Ignore everything under sites-enabled but keep the folder
-#sites-enabled/
-#sites-enabled/**
+sites-enabled/
+sites-enabled/**
 
 # Ignore everything under logs but keep the folder
 logs/
