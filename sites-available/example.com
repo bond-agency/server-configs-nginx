@@ -27,7 +27,7 @@ server {
   ###################################################
 
   # Pagespeed (on/off)
-  set $pagespeed_status off
+  set $pagespeed_status off;
 
   # Skip fastcgi caching (1/0)
   # 0 = cache is active, 1= cache is set off
