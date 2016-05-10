@@ -51,6 +51,7 @@ server {
   # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
   # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
   include h5bp/directive-only/ssl.conf;
+  include h5bp/directive-only/ssl-stapling.conf;
 
   # Path for static files
   root /srv/www/EXAMPLE.COM/public;
