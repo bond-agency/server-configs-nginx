@@ -30,7 +30,7 @@ server {
   ###################################################
 
   # Pagespeed (on/off)
-  set $pagespeed_status off;
+  pagespeed off;
 
   # Skip fastcgi caching (1/0)
   # 0 = cache is active, 1= cache is set off
@@ -86,9 +86,6 @@ server {
   # auth_basic "Login required";
   # auth_basic_user_file /srv/www/EXAMPLE.COM/htpasswd;
   #}
-
-  # Pagespeed
-  pagespeed $pagespeed_status;
 
   # Enable configuration level
   pagespeed RewriteLevel CoreFilters;
