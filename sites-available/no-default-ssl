@@ -26,10 +26,11 @@
 # sites on one server using virtual hosts and all hosts don't have https enabled.
 
 server {
-	# Listen normally on the port 80. This allows f.ex. letsencypt to negotiate
-	# a certificate for the default fully qualified domain name automatically.
+  # Listen normally on the port 80. This allows f.ex. letsencypt to negotiate
+  # a certificate for the default fully qualified domain name automatically.
   listen 80;
-	# Uncomment these after you have created the certificates via letsencrypt
+  
+  # Uncomment these after you have created the certificates via letsencrypt
   # listen 443 default_server ssl;
   # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
   # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
