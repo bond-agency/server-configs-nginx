@@ -45,6 +45,9 @@ server {
   listen [::]:80;
   listen 80;
 
+	# Limit connections per IP (to this host).
+	limit_conn conn_per_ip 32;
+
   # The host name to respond to
   server_name EXAMPLE.COM;
 
@@ -130,5 +133,8 @@ server {
     fastcgi_cache_valid 200 302 10m;
     fastcgi_cache_valid 301 1h;
     fastcgi_cache_valid any 1m;
+
+		# Limit requests to php files.
+		limit_req zone=req_per_ip burst=5 nodelay;
   }
 }
