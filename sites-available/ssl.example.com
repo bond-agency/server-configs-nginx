@@ -61,8 +61,8 @@ server {
   listen [::]:80;
   listen 80;
 
-	# Limit connections per IP (to this host).
-	limit_conn conn_per_ip 32;
+  # Limit connections per IP (to this host).
+  limit_conn conn_per_ip 32;
 
   # The host name to respond to
   server_name EXAMPLE.COM;
@@ -132,25 +132,25 @@ server {
 
   # Pass all .php files onto a php-fpm/php-fcgi server.
   location ~ [^/]\.php(/|$) {
-  	fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-  	if (!-f $document_root$fastcgi_script_name) {
-  		return 404;
-  	}
-  	# This is a robust solution for path info security issue and works with "cgi.fix_pathinfo = 1" in /etc/php.ini (default)
+    fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    if (!-f $document_root$fastcgi_script_name) {
+      return 404;
+    }
+    # This is a robust solution for path info security issue and works with "cgi.fix_pathinfo = 1" in /etc/php.ini (default)
 
-  	include fastcgi.conf;
-  	fastcgi_index index.php;
-  	#fastcgi_intercept_errors on;
-  	fastcgi_pass 127.0.0.1:9000;
+    include fastcgi.conf;
+    fastcgi_index index.php;
+    #fastcgi_intercept_errors on;
+    fastcgi_pass 127.0.0.1:9000;
 
-  	fastcgi_cache_bypass $skip_cache;
-  	fastcgi_no_cache $skip_cache;
-  	fastcgi_cache EXAMPLE.COM;
-  	fastcgi_cache_valid 200 302 10m;
+    fastcgi_cache_bypass $skip_cache;
+    fastcgi_no_cache $skip_cache;
+    fastcgi_cache EXAMPLE.COM;
+    fastcgi_cache_valid 200 302 10m;
     fastcgi_cache_valid 301 1h;
     fastcgi_cache_valid any 1m;
 
-		# Limit requests to php files.
-		limit_req zone=req_per_ip burst=5 nodelay;
+    # Limit requests to php files.
+    limit_req zone=req_per_ip burst=5 nodelay;
   }
 }
