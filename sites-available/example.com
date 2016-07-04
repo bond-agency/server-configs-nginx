@@ -4,7 +4,7 @@
 # the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
 
 # Page caching
-fastcgi_cache_path /srv/www/EXAMPLE.COM/cache levels=1:2 keys_zone=EXAMPLE_CACHE:100m inactive=60m;
+fastcgi_cache_path /srv/www/EXAMPLE.COM/cache levels=1:2 keys_zone=EXAMPLE.COM:100m inactive=60m;
 
 server {
   # don't forget to tell on which port this server listens
@@ -77,7 +77,7 @@ server {
   include global/cache-exclude.conf;
 
   location ~ /purge(/.*) {
-    fastcgi_cache_purge EXAMPLE_CACHE "$scheme$request_method$host$1";
+    fastcgi_cache_purge EXAMPLE.COM "$scheme$request_method$host$1";
   }
 
   # Require authentication to access the directory. If you are using this you must
@@ -118,15 +118,15 @@ server {
       return 404;
     }
     # This is a robust solution for path info security issue and works with "cgi.fix_pathinfo = 1" in /etc/php.ini (default)
-    
+
     include fastcgi.conf;
     fastcgi_index index.php;
     #fastcgi_intercept_errors on;
     fastcgi_pass 127.0.0.1:9000;
-    
+
     fastcgi_cache_bypass $skip_cache;
     fastcgi_no_cache $skip_cache;
-    fastcgi_cache EXAMPLE_CACHE;
+    fastcgi_cache EXAMPLE.COM;
     fastcgi_cache_valid 200 302 10m;
     fastcgi_cache_valid 301 1h;
     fastcgi_cache_valid any 1m;

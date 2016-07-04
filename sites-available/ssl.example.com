@@ -4,7 +4,7 @@
 # the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
 
 # Page caching
-fastcgi_cache_path /srv/www/EXAMPLE.COM/cache levels=1:2 keys_zone=EXAMPLE_CACHE:100m inactive=60m;
+fastcgi_cache_path /srv/www/EXAMPLE.COM/cache levels=1:2 keys_zone=EXAMPLE.COM:100m inactive=60m;
 
 server {
   # don't forget to tell on which port this server listens
@@ -20,6 +20,9 @@ server {
 
 server {
   # Site level settings for fastcgi cache
+  fastcgi_cache_lock on;
+  fastcgi_cache_lock_age 3s;
+  fastcgi_cache_lock_timeout 3s;
   fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
 
   ###################################################
@@ -27,11 +30,19 @@ server {
   ###################################################
 
   # Pagespeed (on/off)
-  set $pagespeed_status off;
+  pagespeed off;
 
   # Skip fastcgi caching (1/0)
   # 0 = cache is active, 1= cache is set off
   set $skip_cache 0;
+
+  # Include SSL
+  listen 443 ssl;
+  # Uncomment these after you have created the certificates via letsencrypt
+  # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
+  # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
+  include h5bp/directive-only/ssl.conf;
+  include h5bp/directive-only/ssl-stapling.conf;
 
   ###################################################
 
@@ -41,17 +52,9 @@ server {
   # listen 80 deferred; # for Linux
   listen [::]:80;
   listen 80;
-  listen 443 ssl;
 
   # The host name to respond to
   server_name EXAMPLE.COM;
-  
-  # Include SSL
-  # Uncomment these after you have created the certificates via letsencrypt
-  # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
-  # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
-  include h5bp/directive-only/ssl.conf;
-  include h5bp/directive-only/ssl-stapling.conf;
 
   # Path for static files
   root /srv/www/EXAMPLE.COM/public;
@@ -82,7 +85,7 @@ server {
   include global/cache-exclude.conf;
 
   location ~ /purge(/.*) {
-    fastcgi_cache_purge EXAMPLE_CACHE "$scheme$request_method$host$1";
+    fastcgi_cache_purge EXAMPLE.COM "$scheme$request_method$host$1";
   }
 
   # Require authentication to access the directory. If you are using this you must
@@ -91,9 +94,6 @@ server {
   # auth_basic "Login required";
   # auth_basic_user_file /srv/www/EXAMPLE.COM/htpasswd;
   #}
-
-  # Pagespeed
-  pagespeed $pagespeed_status;
 
   # Enable configuration level
   pagespeed RewriteLevel CoreFilters;
@@ -134,7 +134,7 @@ server {
 
   	fastcgi_cache_bypass $skip_cache;
   	fastcgi_no_cache $skip_cache;
-  	fastcgi_cache EXAMPLE_CACHE;
+  	fastcgi_cache EXAMPLE.COM;
   	fastcgi_cache_valid 200 302 10m;
     fastcgi_cache_valid 301 1h;
     fastcgi_cache_valid any 1m;
