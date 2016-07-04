@@ -11,6 +11,14 @@ server {
   listen [::]:80;
   listen 80;
 
+  # Include SSL
+  listen 443 ssl;
+  # Uncomment these after you have created the certificates via letsencrypt
+  # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
+  # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
+  include h5bp/directive-only/ssl.conf;
+  include h5bp/directive-only/ssl-stapling.conf;
+
   # listen on the www host
   server_name www.EXAMPLE.COM;
 
