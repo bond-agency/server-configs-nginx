@@ -81,7 +81,7 @@ server {
   charset utf-8;
 
   # Custom 404 page
-  error_page 404 /404.html;
+  #error_page 404 /404.html;
 
   # Redirects for WP sitemaps
   include global/yoast-wordpress-seo.conf;
