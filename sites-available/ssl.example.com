@@ -107,7 +107,7 @@ server {
   pagespeed RewriteLevel CoreFilters;
 
   # Enabled extra rules
-  pagespeed EnableFilters collapse_whitespace,insert_dns_prefetch,prioritize_critical_css;
+  pagespeed EnableFilters collapse_whitespace,insert_dns_prefetch;
 
   # Needs to exist and be writable by nginx.  Use tmpfs for best performance.
   pagespeed FileCachePath /var/ngx_pagespeed_cache/EXAMPLE.COM;
