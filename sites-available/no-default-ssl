@@ -43,6 +43,8 @@ server {
 
   # Index files
   index index.html;
+  
+  include h5bp/location/protect-system-files.conf;
 
   # Redirect everything to the index.html.
   location / {
