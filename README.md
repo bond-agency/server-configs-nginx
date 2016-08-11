@@ -35,8 +35,4 @@ The code is available under the [MIT license](LICENSE.txt).
 
 ## Note of BONDs modifications
 
-We have modified the setup to work with our companys nginx setup so if you use this setup make sure you test the configuration with:
-
-```sudo nginx -t```
-
-before reloading or restarting the server with new confs.
+We have modified the setup to work with our companys nginx setup so if you use this setup make sure you test the configuration with: `sudo nginx -t` before reloading or restarting the server with new confs.
