@@ -136,6 +136,7 @@ server {
   	# This is a robust solution for path info security issue and works with "cgi.fix_pathinfo = 1" in /etc/php.ini (default)
 
   	include fastcgi.conf;
+  	fastcgi_param HTTP_PROXY ""; # https://httpoxy.org/#prevent
   	fastcgi_index index.php;
   	#fastcgi_intercept_errors on;
   	fastcgi_pass 127.0.0.1:9000;
