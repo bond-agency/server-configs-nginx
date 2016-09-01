@@ -1,4 +1,4 @@
-git pu# www to non-www redirect -- duplicate content is BAD:
+# www to non-www redirect -- duplicate content is BAD:
 # https://github.com/h5bp/html5-boilerplate/blob/5370479476dceae7cc3ea105946536d6bc0ee468/.htaccess#L362
 # Choose between www and non-www, listen on the *wrong* one and redirect to
 # the right one -- http://wiki.nginx.org/Pitfalls#Server_Name
