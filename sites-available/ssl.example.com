@@ -12,7 +12,7 @@ server {
   listen 80;
 
   # Include SSL
-  listen 443 ssl;
+  listen 443 ssl http2;
   # Uncomment these after you have created the certificates via letsencrypt
   # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
   # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
@@ -45,7 +45,7 @@ server {
   set $skip_cache 0;
 
   # Include SSL
-  listen 443 ssl;
+  listen 443 ssl http2;
   # Uncomment these after you have created the certificates via letsencrypt
   # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
   # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
