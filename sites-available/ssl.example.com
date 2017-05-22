@@ -127,9 +127,8 @@ server {
   location ~ "^/pagespeed_static/" { }
   location ~ "^/ngx_pagespeed_beacon$" { }
 
-  # Only include one of the files below.
+  # Include global WordPress specific settings.
   include global/wordpress.conf;
-  #include global/wordpress-ms-subdir.conf;
 
   # Pass all .php files onto a php-fpm/php-fcgi server.
   location ~ [^/]\.php(/|$) {
