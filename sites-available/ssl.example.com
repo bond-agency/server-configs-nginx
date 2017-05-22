@@ -101,6 +101,7 @@ server {
   #location / {
   # auth_basic "Login required";
   # auth_basic_user_file /srv/www/EXAMPLE.COM/htpasswd;
+  # try_files $uri $uri/ /index.php?$args;
   #}
 
   # Enable configuration level
