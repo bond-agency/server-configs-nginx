@@ -34,7 +34,7 @@ server {
 
   # Skip fastcgi caching (1/0)
   # 0 = cache is active, 1= cache is set off
-  set $skip_cache 0;
+  set $skip_cache 1;
 
   ###################################################
 
@@ -137,6 +137,6 @@ server {
     fastcgi_cache_valid any 1m;
 
     # Limit requests to php files.
-    limit_req zone=req_per_ip burst=5 nodelay;
+    limit_req zone=req_per_ip burst=20 nodelay;
   }
 }
