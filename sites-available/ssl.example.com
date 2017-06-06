@@ -12,6 +12,7 @@ server {
   listen 80;
 
   # Include SSL
+  listen [::]:443 ssl http2;
   listen 443 ssl http2;
   # Uncomment these after you have created the certificates via letsencrypt
   # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
@@ -45,6 +46,7 @@ server {
   set $skip_cache 1;
 
   # Include SSL
+  listen [::]:443 ssl http2;
   listen 443 ssl http2;
   # Uncomment these after you have created the certificates via letsencrypt
   # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
@@ -60,6 +62,13 @@ server {
   # listen 80 deferred; # for Linux
   listen [::]:80;
   listen 80;
+
+  # listen [::]:443 ssl http2 accept_filter=dataready;  # for FreeBSD
+  # listen 443 ssl http2 accept_filter=dataready;  # for FreeBSD
+  # listen [::]:443 ssl http2 deferred;  # for Linux
+  # listen 443 ssl http2 deferred;  # for Linux
+  listen [::]:443 ssl http2;
+  listen 443 ssl http2;
 
   # Limit connections per IP (to this host).
   limit_conn conn_per_ip 32;
