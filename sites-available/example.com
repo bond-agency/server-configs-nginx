@@ -65,10 +65,16 @@ server {
   #########################################
 
   # Site level settings for fastcgi cache
+  fastcgi_cache EXAMPLE.COM;
   fastcgi_cache_lock on;
   fastcgi_cache_lock_age 3s;
   fastcgi_cache_lock_timeout 3s;
   fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
+  fastcgi_cache_background_update on;
+  fastcgi_cache_revalidate on;
+  fastcgi_cache_valid 200 302 10m;
+  fastcgi_cache_valid 301 1h;
+  fastcgi_cache_valid any 1m;
 
   # Enable purge by appending /purge to the page URL
   location ~ /purge(/.*) {
@@ -132,10 +138,6 @@ server {
 
     fastcgi_cache_bypass $skip_cache;
     fastcgi_no_cache $skip_cache;
-    fastcgi_cache EXAMPLE.COM;
-    fastcgi_cache_valid 200 302 10m;
-    fastcgi_cache_valid 301 1h;
-    fastcgi_cache_valid any 1m;
 
     # Limit requests to php files.
     limit_req zone=req_per_ip burst=20 nodelay;
