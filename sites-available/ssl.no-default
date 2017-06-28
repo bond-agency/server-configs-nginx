@@ -1,13 +1,58 @@
-# Drop requests for unknown hosts
+##################################
+# SSL default host configuration #
+##################################
+
+# This configuration acts as a default server for https connections. It means
+# that when a host that doesn't have https turned on is accessed using https
+# the request will end up here. It's not possible to just drop the connection
+# because the SSL handshake happens before anything else can be done and the
+# handshake will need a certificate file.
 #
-# If no default server is defined, nginx will use the first found server.
-# To prevent host header attacks, or other potential problems when an unknown
-# servername is used in a request, it's recommended to drop the request
-# returning 444 "no response".
+# Without a default server for https nginx would select the first host that
+# has https enabled. This is a problem as we don't want client A's site to show
+# a certificate warning and client B's site if accessed through https.
+#
+# The best solution to this problem is to have a default https host that does
+# nothing else but shows a simple html error page. With this configuration
+# a client accessing a site that doesn't have https enabled with https will
+# see a certificate warning and then the error page hosted at this default
+# domain.
+#
+# Remember to create the index.html page in the root of the default domain that
+# acts as the error page and ensure the certificate file exists before using this
+# configuration.
+#
+# PS: This whole problems only exists if you're hosting multiple http and https
+# sites on one server using virtual hosts and all hosts don't have https enabled.
+#
+# PS: We could just drop the requests by returning 444 and get rid of the document
+# root and most of the other confs here but then we couldn't use letsencrypt for
+# the cert renewal. Though renewing the cert at all is debatable as long as we just
+# have it.
 
 server {
-  listen [::]:443 ssl default_server;
-  listen 443 ssl default_server;
-  include h5bp/directive-only/ssl.conf;
-  return 444;
+  # Listen normally on the port 80. This allows f.ex. letsencypt to negotiate
+  # a certificate for the default fully qualified domain name automatically.
+  listen [::]:80;
+  listen 80;
+  
+  # Uncomment these after you have created the certificates via letsencrypt
+  # listen [::]:443 ssl default_server;
+  # listen 443 ssl default_server;
+  # ssl_certificate /etc/letsencrypt/live/EXAMPLE.COM/fullchain.pem;
+  # ssl_certificate_key /etc/letsencrypt/live/EXAMPLE.COM/privkey.pem;
+  # include h5bp/directive-only/ssl.conf;
+
+  # The host name to respond to
+  server_name EXAMPLE.COM;
+
+  # Path for static files
+  root /srv/www/EXAMPLE.COM/public;
+  
+  include h5bp/location/protect-system-files.conf;
+
+  # Redirect everything to the index.html.
+  location / {
+    try_files /index.html $uri;
+  }
 }
