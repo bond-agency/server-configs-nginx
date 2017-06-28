@@ -7,7 +7,6 @@
 fastcgi_cache_path /srv/www/EXAMPLE.COM/cache levels=1:2 keys_zone=EXAMPLE.COM:100m inactive=60m;
 
 server {
-  # don't forget to tell on which port this server listens
   listen [::]:80;
   listen 80;
 
@@ -15,19 +14,37 @@ server {
   server_name www.EXAMPLE.COM;
 
   # and redirect to the non-www host (declared below)
-  return 301 $scheme://EXAMPLE.COM$request_uri;
+  return 301 http://EXAMPLE.COM$request_uri;
 }
 
 server {
-  # Site level settings for fastcgi cache
-  fastcgi_cache_lock on;
-  fastcgi_cache_lock_age 3s;
-  fastcgi_cache_lock_timeout 3s;
-  fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
+  listen [::]:80;
+  listen 80;
 
-  ###################################################
-  # Settings to turn on pagespeed and fastcgi cache #
-  ###################################################
+  # The host name to respond to
+  server_name EXAMPLE.COM;
+
+  # Path for static files
+  root /srv/www/EXAMPLE.COM/public;
+
+  # Require authentication to access the directory. Enable if needed.
+  # If you are using this you must disable the global wordpress confs.
+  #location / {
+  # auth_basic "Login required";
+  # auth_basic_user_file /srv/www/EXAMPLE.COM/htpasswd;
+  # try_files $uri $uri/ /index.php?$args;
+  #}
+
+  # Custom log locations. Enable if needed.
+  #error_log  /srv/www/EXAMPLE.COM/logs/error.log warn;
+  #access_log /srv/www/EXAMPLE.COM/logs/access.log main;
+
+  # Custom 404 page. Enable if needed.
+  #error_page 404 /404.html;
+
+  #########################################
+  # Speed, Caching, Limiting              #
+  #########################################
 
   # Pagespeed (on/off)
   pagespeed off;
@@ -36,39 +53,29 @@ server {
   # 0 = cache is active, 1= cache is set off
   set $skip_cache 1;
 
-  ###################################################
-
-  # listen [::]:80 accept_filter=httpready; # for FreeBSD
-  # listen 80 accept_filter=httpready; # for FreeBSD
-  # listen [::]:80 deferred; # for Linux
-  # listen 80 deferred; # for Linux
-  listen [::]:80;
-  listen 80;
+  # Include page caching exclude configuration. Wether you cache
+  # or not this should be included after your skip setting.
+  include global/cache-exclude.conf;
 
   # Limit connections per IP (to this host).
   limit_conn conn_per_ip 32;
 
-  # The host name to respond to
-  server_name EXAMPLE.COM;
+  #########################################
+  # FastCGI cache configuration           #
+  #########################################
 
-  # Path for static files
-  root /srv/www/EXAMPLE.COM/public;
+  # Site level settings for fastcgi cache
+  fastcgi_cache_lock on;
+  fastcgi_cache_lock_age 3s;
+  fastcgi_cache_lock_timeout 3s;
+  fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
 
-  # Index files
-  index index.html index.php;
+  # Enable purge by appending /purge to the page URL
+  location ~ /purge(/.*) {
+    fastcgi_cache_purge EXAMPLE.COM "$scheme$request_method$host$1";
+  }
 
-  # Custom log locations. Enable if needed.
-  #error_log  /srv/www/EXAMPLE.COM/logs/error.log warn;
-  #access_log /srv/www/EXAMPLE.COM/logs/access.log main;
-
-  # Specify a charset
-  charset utf-8;
-
-  # Custom 404 page
-  #error_page 404 /404.html;
-
-  # Redirects for WP sitemaps
-  include global/yoast-wordpress-seo.conf;
+  #########################################
 
   # Include global restrictions
   include global/restrictions.conf;
@@ -76,20 +83,9 @@ server {
   # Include the basic h5bp config set
   include h5bp/basic.conf;
 
-  # Include page caching exclude configuration.
-  include global/cache-exclude.conf;
-
-  location ~ /purge(/.*) {
-    fastcgi_cache_purge EXAMPLE.COM "$scheme$request_method$host$1";
-  }
-
-  # Require authentication to access the directory. If you are using this you must
-  # disable the global wordpress confs.
-  #location / {
-  # auth_basic "Login required";
-  # auth_basic_user_file /srv/www/EXAMPLE.COM/htpasswd;
-  # try_files $uri $uri/ /index.php?$args;
-  #}
+  #########################################
+  # PageSpeed configuration               #
+  #########################################
 
   # Enable configuration level
   pagespeed RewriteLevel CoreFilters;
@@ -97,7 +93,7 @@ server {
   # Enabled extra rules
   pagespeed EnableFilters collapse_whitespace,insert_dns_prefetch;
 
-  # Needs to exist and be writable by nginx.  Use tmpfs for best performance.
+  # Needs to exist and be writable by nginx. Use tmpfs for best performance.
   pagespeed FileCachePath /var/ngx_pagespeed_cache/EXAMPLE.COM;
 
   # Needed for WPML directory test to pass
@@ -111,16 +107,24 @@ server {
   location ~ "^/pagespeed_static/" { }
   location ~ "^/ngx_pagespeed_beacon$" { }
 
+  #########################################
+  # WordPress & PHP-FPM configuration     #
+  #########################################
+  
+  # Redirects for WP sitemaps
+  include global/yoast-wordpress-seo.conf;
+
   # Include global WordPress specific settings.
   include global/wordpress.conf;
 
   # Pass all .php files onto a php-fpm/php-fcgi server.
   location ~ [^/]\.php(/|$) {
   fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    # This is a robust solution for path info security issue and works
+    # with "cgi.fix_pathinfo = 1" in /etc/php.ini (default).
     if (!-f $document_root$fastcgi_script_name) {
       return 404;
     }
-    # This is a robust solution for path info security issue and works with "cgi.fix_pathinfo = 1" in /etc/php.ini (default)
 
     include fastcgi.conf;
     fastcgi_param HTTP_PROXY ""; # https://httpoxy.org/#prevent
