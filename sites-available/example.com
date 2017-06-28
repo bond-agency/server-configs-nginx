@@ -76,14 +76,6 @@ server {
   }
 
   #########################################
-
-  # Include global restrictions
-  include global/restrictions.conf;
-
-  # Include the basic h5bp config set
-  include h5bp/basic.conf;
-
-  #########################################
   # PageSpeed configuration               #
   #########################################
 
@@ -110,9 +102,15 @@ server {
   #########################################
   # WordPress & PHP-FPM configuration     #
   #########################################
+
+  # Include global restrictions
+  include global/restrictions.conf;
   
-  # Redirects for WP sitemaps
+  # Redirects for WP Yoast SEO sitemaps
   include global/yoast-wordpress-seo.conf;
+
+  # Include the basic h5bp config set
+  include h5bp/basic.conf;
 
   # Include global WordPress specific settings.
   include global/wordpress.conf;
