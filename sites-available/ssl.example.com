@@ -98,9 +98,7 @@ server {
   fastcgi_cache_use_stale updating error timeout invalid_header http_500 http_503;
   fastcgi_cache_background_update on;
   fastcgi_cache_revalidate on;
-  fastcgi_cache_valid 200 302 10m;
-  fastcgi_cache_valid 301 1h;
-  fastcgi_cache_valid any 1m;
+  fastcgi_cache_valid 200 301 302 404 1h;
 
   # Enable purge by appending /purge to the page URL
   location ~ /purge(/.*) {
