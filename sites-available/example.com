@@ -111,7 +111,8 @@ server {
   include global/restrictions.conf;
   
   # Redirects for WP Yoast SEO sitemaps
-  include global/yoast-wordpress-seo.conf;
+  #include global/yoast-wordpress-seo.conf;
+  #include global/google-xml-sitemaps.conf;
 
   # Include the basic h5bp config set
   include h5bp/basic.conf;
